@@ -16,4 +16,14 @@
     <url-pattern>/login</url-pattern>
   </servlet-mapping>
 
+  <servlet>
+    <servlet-name>condition</servlet-name>
+    <servlet-class>org.example.servlets.tasks.ConditionServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>condition</servlet-name>
+    <url-pattern>/condition</url-pattern>
+  </servlet-mapping>
+
 </web-app>

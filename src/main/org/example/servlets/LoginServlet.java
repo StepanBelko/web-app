@@ -35,7 +35,8 @@ public class LoginServlet extends HttpServlet {
         final String password = req.getParameter("pwd");
 
         if (email.trim().equalsIgnoreCase(AppConstants.DUMMY_USER_EMAIL) && password.equals(AppConstants.DUMMY_USER_PWD)) {
-            resp.getWriter().println("Hello, " + email);
+            RequestDispatcher rd = req.getRequestDispatcher("welcome");
+            rd.forward(req, resp);
         }  else {
             resp.setContentType("text/html");
             RequestDispatcher rd = req.getRequestDispatcher("login.html");
