@@ -21,10 +21,22 @@ public class DBUtils {
 
     public static void release(Connection conn, Statement stmt, PreparedStatement pstmt, ResultSet rs) {
             try {
-                if (conn != null) conn.close();
-                if (stmt != null) stmt.close();
-                if (pstmt != null) pstmt.close();
-                if (rs != null) rs.close();
+                if (conn != null) {
+                    conn.close();
+                    System.out.println("Connection closed "+ conn);
+                }
+                if (stmt != null) {
+                    stmt.close();
+                    System.out.println("Statement is closed " + stmt);
+                }
+                if (pstmt != null) {
+                    pstmt.close();
+                    System.out.println("Prepared statement is closed " + pstmt);
+                }
+                if (rs != null) {
+                    rs.close();
+                    System.out.println("ResultSet is closed " + rs);
+                }
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

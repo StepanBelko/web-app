@@ -6,7 +6,7 @@ public class AppConstants {
     public static final String DUMMY_USER_PWD = "123";
 
 
-    public static final String DB_URL = "jdbc:mysql://localhost:3308/mysql";
+    public static final String DB_URL = "jdbc:mysql://localhost:3308/crazy_users_db";
     public static final String DB_USER = "root";
     public static final String DB_PASSWORD = "";
     public static final String DB_DRIVER = "com.mysql.cj.jdbc.Driver";

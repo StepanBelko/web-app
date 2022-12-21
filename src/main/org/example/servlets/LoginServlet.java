@@ -1,9 +1,12 @@
 package org.example.servlets;
 
+import org.example.dao.impl.UsersDAO;
+import org.example.model.User;
 import org.example.util.AppConstants;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,19 +14,12 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 
+
+@WebServlet("/login")
 public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         resp.setContentType("text/html;charset=UTF-8");
-//        PrintWriter pw = resp.getWriter();
-//
-//        pw.println("<form action='test'>");
-//        pw.println("<label for='email'>Email:</label><br>");
-//        pw.println("<input type='email' id='email' name='email' value='John@gmail.com'><br>");
-//        pw.println("<label for='pwd'>Last name:</label><br>");
-//        pw.println("<input type='password' id='pwd' name='pwd' value=''><br><br>");
-//        pw.println("<input type='submit' value='Login'>");
-//        pw.println("</form>");
 
         RequestDispatcher rd = req.getRequestDispatcher("login.html");
         rd.forward(req, resp);
@@ -33,13 +29,17 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String email = req.getParameter("email");
         final String password = req.getParameter("pwd");
+        resp.setContentType("text/html");
+        RequestDispatcher rd = req.getRequestDispatcher("login.html");
 
-        if (email.trim().equalsIgnoreCase(AppConstants.DUMMY_USER_EMAIL) && password.equals(AppConstants.DUMMY_USER_PWD)) {
-            RequestDispatcher rd = req.getRequestDispatcher("welcome");
+        User user = new UsersDAO().getByEmail(email);
+        if (user == null) {
+            resp.getWriter().println("user does not exist. Please <a href='registration'> Registration </a>");
+            rd.include(req, resp);
+        } else if (password.equals(user.getPassword())) {
+            rd = req.getRequestDispatcher("welcome");
             rd.forward(req, resp);
-        }  else {
-            resp.setContentType("text/html");
-            RequestDispatcher rd = req.getRequestDispatcher("login.html");
+        } else {
             resp.getWriter().println("wrong email or password");
             rd.include(req, resp);
         }

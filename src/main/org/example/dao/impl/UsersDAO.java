@@ -5,6 +5,7 @@ import org.example.model.User;
 import org.example.util.DBUtils;
 
 import java.sql.Connection;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Set;
@@ -37,17 +38,30 @@ public class UsersDAO extends AbstractDAO<User> {
 
     public User getByEmail(String email) {
         Connection conn = DBUtils.getConnection();
-        final String sql = "SELECT * FROM `users` WHERE email = '" + email + "'";
-
+        final String sql = "SELECT * FROM crazy_users_db.users WHERE email = '" + email + "'";
+        Statement stmt = null;
+        ResultSet rs = null;
+        User user = null;
         try {
-            Statement stmt = conn.createStatement();
+            stmt = conn.createStatement();
+            rs = stmt.executeQuery(sql);
+
+            if (rs.next()) {
+                System.out.println("User is found");
+                user = new User();
+                user.setEmail(email);
+                user.setId(rs.getInt(1));
+                user.setName(rs.getString("name"));
+                user.setPassword(rs.getString("password"));
+            } else {
+                System.out.println("User is not found by email " + email);
+            }
         } catch (SQLException e) {
+            e.printStackTrace();
             throw new RuntimeException(e);
+        } finally {
+            DBUtils.release(conn, stmt, null, rs);
         }
-
-
-        DBUtils.release(conn, null, null, null);
-
-        return null;
+        return user;
     }
 }
